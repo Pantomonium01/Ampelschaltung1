@@ -3,12 +3,6 @@
 #include <gpio.h>
 
 
-
-
-
-
-
-
 // Timer
 void delay_ms(uint32_t ms)
 {
@@ -55,7 +49,7 @@ int main(void)
     SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PB;  // Set EXTI0 bits to PB 
     //exticr[array0weilpin0] |= syscfg_exticr1(weilRegister1)exti0(weilPin0)_PB (weil Port B)
 
-//anpassen
+
         /* Enable EXTI for line 0 (PB0) */
     EXTI->IMR |= EXTI_IMR_MR0;     // Enable EXTI interrupt
     
@@ -67,11 +61,6 @@ int main(void)
 
     // Enable global interrupts
     __enable_irq();
-
-
-    // Variable zur Speicherung des vorherigen Zustands des Buttons
-    int previousButtonState = 1;  // Annahme: Nicht gedrückt zu Beginn
-
 
 
     // Endlosschleife
@@ -126,6 +115,7 @@ int main(void)
             gpio_reset_pin(GPIOA,1); // Gelb ausschalten
             gpio_reset_pin(GPIOA,4); // Grün ausschalten
             delay_ms(1000);
+            gpio_reset_pin(GPIOA,0); //Rot wieder ausschalten 
             ampelState = 0; //ampel aus
         }
 
@@ -143,7 +133,7 @@ int main(void)
 
 void EXTI0_IRQHandler(void)
 {
-    if (EXTI->PR & EXTI_PR_PR0)
+    if (EXTI->PR & EXTI_PR_PR0 & ampelState==0) //damit Ampelschaltung nur reagiert wenn wirklich aus ist
     {
         //Handle button press
 
