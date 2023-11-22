@@ -8,7 +8,6 @@
 
 
 
-
 // Timer
 void delay_ms(uint32_t ms)
 {
@@ -59,7 +58,7 @@ int main(void)
         /* Enable EXTI for line 0 (PB0) */
     EXTI->IMR |= EXTI_IMR_MR0;     // Enable EXTI interrupt
     
-    EXTI->FTSR |= EXTI_FTSR_TR0;   // Enable rising edge trigger
+    EXTI->RTSR |= EXTI_RTSR_TR0;   // Enable rising edge trigger
 
     /* Enable and set the EXTI interrupt in NVIC */
     NVIC_EnableIRQ(EXTI0_IRQn);
@@ -88,7 +87,7 @@ int main(void)
             gpio_reset_pin(GPIOA,1); // Gelb ausschalten
             gpio_reset_pin(GPIOA,4); // Grün ausschalten
         }
-        if (ampelState == 1) // Rot
+        else if (ampelState == 1) // Rot
         {
             gpio_set_pin(GPIOA,0); // Rot einschalten
             gpio_reset_pin(GPIOA,1); // Gelb ausschalten
@@ -96,7 +95,7 @@ int main(void)
             delay_ms(2000);
             ampelState = 2; // Rot -> Rot-Gelb
         }
-        if (ampelState == 2) // Rot-Gelb
+        else if (ampelState == 2) // Rot-Gelb
         {
             gpio_set_pin(GPIOA,0); // Rot einschalten
             gpio_set_pin(GPIOA,1); // Gelb einschalten
@@ -104,7 +103,7 @@ int main(void)
             delay_ms(1000);
             ampelState = 3; // Rot-Gelb -> Grün
         }
-        if (ampelState == 3) // Grün
+        else if (ampelState == 3) // Grün
         {
             gpio_reset_pin(GPIOA,0); // Rot ausschalten
             gpio_reset_pin(GPIOA,1); // Gelb aussschalten
@@ -112,7 +111,7 @@ int main(void)
             delay_ms(5000);
             ampelState = 4; // Grün -> Gelb
         }
-        if (ampelState == 4) // Gelb
+        else if (ampelState == 4) // Gelb
         {
             gpio_reset_pin(GPIOA,0); // Rot ausschalten
             gpio_set_pin(GPIOA,1); // Gelb einschalten
@@ -120,7 +119,7 @@ int main(void)
             delay_ms(1000);
             ampelState = 5; //ampel aus
         }
-        if (ampelState == 5) // Gelb
+        else if (ampelState == 5) // Gelb
         {
             gpio_set_pin(GPIOA,0); // Rot einschalten
             gpio_reset_pin(GPIOA,1); // Gelb ausschalten
@@ -146,9 +145,7 @@ void EXTI0_IRQHandler(void)
     if (EXTI->PR & EXTI_PR_PR0)
     {
         //Handle button press
-
-            ampelState = 1;
-
+        ampelState = 1;
 
         //Clear interrupt flag
         EXTI->PR |= EXTI_PR_PR0;
