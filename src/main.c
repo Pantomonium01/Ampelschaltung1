@@ -133,7 +133,7 @@ int main(void)
 
 void EXTI0_IRQHandler(void)
 {
-    if (EXTI->PR & EXTI_PR_PR0 & ampelState==0) //damit Ampelschaltung nur reagiert wenn wirklich aus ist
+    if (EXTI->PR & EXTI_PR_PR0) //damit Ampelschaltung nur reagiert wenn wirklich aus ist
     {
         //Handle button press
 
